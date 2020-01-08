@@ -25,7 +25,7 @@ function Register_Button(arg) {
    
 }
 
-  //回车时，默认是登陆
+//按键按下时的处理函数
  function AUTO_KeyClick(){
  if(window.event.keyCode == 13){
   if (document.all('Register')!=null){
@@ -33,3 +33,24 @@ function Register_Button(arg) {
    }
  }
  }
+//获取当前时间
+ function Get_NowTime() {
+    
+    var date = new Date();
+
+    Y = date.getFullYear() + '-';
+    
+    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+    
+    D = date.getDate() + ' ';
+    
+    h = date.getHours() + ':';
+    
+    m = date.getMinutes() + ':';
+    
+    s = date.getSeconds(); 
+    
+
+
+    document.getElementById("date").innerHTML = Y+M+D+h+m+s;
+}
