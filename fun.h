@@ -153,7 +153,7 @@ extern void InsertArp_listToList(ARPLIST* Node,ARPLIST** Head);
 extern int ArpDispose(unsigned char *ip,unsigned char *mac,unsigned char *mac_back,int flag);
 
 
-extern int Config_Route_MsgDispose(unsigned char *ip,unsigned char *mac,unsigned char *ip_back,int flag);
+extern int Config_Route_MsgDispose(unsigned char *ip, unsigned char *mac_back, unsigned char *ip_back, int flag);
 
 extern int ReadConfig_Route_MsgFile();
 extern int interface_num ; //接口数量

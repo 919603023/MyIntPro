@@ -359,10 +359,10 @@ int ArpDispose(unsigned char *ip, unsigned char *mac, unsigned char *mac_back, i
 
 	if (HEAD == NULL && flag != INSERT)
 	{
-		
+
 		return -1;
 	}
-		
+
 	while (head != NULL)
 	{
 
@@ -388,13 +388,13 @@ int ArpDispose(unsigned char *ip, unsigned char *mac, unsigned char *mac_back, i
 			}
 			else if (flag == FIND || flag == INSERT)
 			{
-				
+
 				memcpy(mac_back, head->mac, 6);
 				free(temp);
 				return 1;
 			}
 		}
-		if(head->next == NULL)
+		if (head->next == NULL)
 		{
 			break;
 		}
@@ -426,29 +426,38 @@ int ArpDispose(unsigned char *ip, unsigned char *mac, unsigned char *mac_back, i
  * 所出网卡，不相同返回-1
  * 
  * 只能FIND查找和删除
- * 
+ * 参数：
+ * 	unsigned char *ip:查这个IP
+ *  unsigned char *mac_back:如果找到，目的mac存放位置
+ * 	unsigned char *ip_back:如果找到，目的IP地址
+ * 	 int flag：使用选项
  * *******************************/
-int Config_Route_MsgDispose(unsigned char *ip, unsigned char *mac, unsigned char *ip_back, int flag)
+int Config_Route_MsgDispose(unsigned char *ip, unsigned char *mac_back, unsigned char *ip_back, int flag)
 {
 	if (Route_Msg == NULL && flag != INSERT)
+	{
 		return -1;
-
+	}
 	int eth = -1;
 	CONFIG_ROUTE_MSG *head = Route_Msg;
-
+	
 	while (head != NULL)
 	{
 		//对比路由表中网段地址，与目的网段地址是否相同
 		//如果相同，证明路由表中有记录
-		unsigned  int tmp = TwoIPNet(ip, head->Route_Netmask);
-		unsigned int *tm =&tmp;
-		if (memcmp(head->Route_Ip, tm, 4) == 0)
+		// unsigned  int tmp = TwoIPNet(ip, head->Route_Netmask);
+		// unsigned int *tm =&tmp;
+		// unsigned int tmmp = (unsigned int)(head->Route_Ip);
+		
+		// printf("%d\n",AND(head->Route_Ip,head->Route_Netmask));
+		// printf("%d\n",AND(ip, head->Route_Netmask));
+		if (AND(head->Route_Ip,head->Route_Netmask)  == AND(ip, head->Route_Netmask))
 		{
 			if (flag == DELETE)
 			{
-
 				if (head->front != HEAD)
 				{
+					
 					head->next->front = head->front;
 					head->front->next = head->next;
 					free(head);
@@ -467,15 +476,28 @@ int Config_Route_MsgDispose(unsigned char *ip, unsigned char *mac, unsigned char
 				for (int i = 0; i < interface_num; i++)
 				{
 					//判断路由表中的下一跳IP网段为哪一个网卡的网段
-					if (memcmp((unsigned char *)(TwoIPNet(head->Route_NextHop, net_interface[i].netmask)), (unsigned char *)(TwoIPNet(net_interface[i].netmask, net_interface[i].ip)), 4) == 0)
+					if (AND(head->Route_NextHop, net_interface[i].netmask)==AND(net_interface[i].netmask, net_interface[i].ip))
 					{
+						if(flag == FIND)
+						{
+							memcpy(ip_back,head->Route_NextHop,4);
+						memcpy(mac_back,net_interface[i].mac,6);
+						unsigned char buff[100];
+				sprintf(buff,"目的IP：%d,%d,%d,%d",ip_back[0],ip_back[1],ip_back[2],ip_back[3]);
+				printf("%s\n",buff);
+				printf("所出去的网卡为:%s \n",net_interface[i].name);
+						
+						}
 						eth = i;
 					}
+					
 				}
 			}
 		}
+		
 		if (head->next == NULL)
 		{
+
 			break;
 		}
 		else
@@ -501,7 +523,7 @@ int Config_Route_MsgDispose(unsigned char *ip, unsigned char *mac, unsigned char
 	}
 	else
 	{
-		return 0;
+		return eth;
 	}
 }
 

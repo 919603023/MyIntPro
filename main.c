@@ -53,27 +53,34 @@ int main()
 			{
 				continue;
 			}
-
 				
 		}
 		//是否是同一网段
 		int Ethnum;
 
 		Ethnum = IsSameSegment();
-		
 		//有同一网段，返回所出去的网卡
+		//如果所出网卡为-1，证明没有不是本路由器网段
+		//需要查路由表获取目的IP和目的
 		if (Ethnum == -1)
 		{
-			//没有同一网段
-			//路由表查表
-			Ethnum = Config_Route_MsgDispose(mybuf.dst_ip, NULL, NULL, INSERT);
-			if (Ethnum == -1)
+			//如果获取的网卡仍然是-1，证明，路由表中没有该目的IP的下一跳
+			//直接丢包
+			Ethnum = Config_Route_MsgDispose(mybuf.dst_ip,buf+6, mybuf.dst_ip, FIND);
+			if (Ethnum != -1)
 			{
-				unsigned char buf[100];
-				sprintf(buf,"目的IP：%d,%d,%d,%d",mybuf.dst_ip[0],mybuf.dst_ip[1],mybuf.dst_ip[2],mybuf.dst_ip[3]);
-				printf("%s\n",buf);
+				// unsigned char buff[100];
+				// sprintf(buf,"目的IP：%d,%d,%d,%d",mybuf.dst_ip[0],mybuf.dst_ip[1],mybuf.dst_ip[2],mybuf.dst_ip[3]);
+				// printf("%s\n",buff);
+				// printf("所出去的网卡为:%s ",net_interface[Ethnum].name);
+				// printf("这个包发到的mac：%s ",mybuf.dst_mac);
+				
+			}
+			else
+			{
 				continue;
 			}
+			
 			//路由表有同一网段，返回所出去的网卡
 
 			
