@@ -7,7 +7,7 @@ function Register_Button(arg) {
         var pwd = document.getElementById("pwd").value;
         if(usr=="admin" && pwd =="admin")
         {
-            window.location.href = "http://www.baidu.com"
+            window.location.href = "Main.html"
         }
         else
         {

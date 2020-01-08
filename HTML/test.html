@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>路由器管理登录界面</title>
     <script type="text/javascript" src="test.js">
-   
     </script>
 </head>
-
-    <body  onkeydown="AUTO_KeyClick();">
+<form method="GET" action="deal.cgi">
+    <body  onkeydown="AUTO_KeyClick();" >
 
         用户名:<input type="text" id="usr">
     <br>
@@ -19,5 +18,9 @@
     <input type="button" value="登陆" id="Register" onclick='Register_Button(1);' >
         
     <input type="button" value="取消" id="Cancel" onclick='Register_Button(0);' >
+   
+
+</form>
+    
 </body>
 </html>
