@@ -6,13 +6,12 @@ int main()
 	getinterface(); // 获取自身网卡信息
 
 	int fd = socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
-	printf("fd = %d\n", fd);
+	
 	CONFIG_ROUTE_MSG *head = Route_Msg;
 	if (head != NULL)
 		
 	while (head != NULL)
 	{
-
 		for (int i = 0; i < 4; i++)
 		{
 			printf("%d.", head->Route_Ip[i]);
@@ -69,11 +68,7 @@ int main()
 			Ethnum = Config_Route_MsgDispose(mybuf.dst_ip,buf+6, mybuf.dst_ip, FIND);
 			if (Ethnum != -1)
 			{
-				// unsigned char buff[100];
-				// sprintf(buf,"目的IP：%d,%d,%d,%d",mybuf.dst_ip[0],mybuf.dst_ip[1],mybuf.dst_ip[2],mybuf.dst_ip[3]);
-				// printf("%s\n",buff);
-				// printf("所出去的网卡为:%s ",net_interface[Ethnum].name);
-				// printf("这个包发到的mac：%s ",mybuf.dst_mac);
+				//路由表有同一网段，返回所出去的网卡
 				
 			}
 			else
@@ -81,13 +76,10 @@ int main()
 				continue;
 			}
 			
-			//路由表有同一网段，返回所出去的网卡
+			
 
 			
 		}
-
-		
-
 		//查ARP表
 		//查ARP表
                  //如果查到，将目的buf中的目的mac赋值为此IP的mac
@@ -97,8 +89,6 @@ int main()
 			SendArp(Ethnum,0,fd,NULL);
 			continue;
 		}
-		
-
 			memcpy(buf, mybuf.dst_mac, 6);
 			memcpy(buf + 6, net_interface[Ethnum].mac, 6);
 			SendTo(len, buf, Ethnum, fd);
