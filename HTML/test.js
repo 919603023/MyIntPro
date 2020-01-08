@@ -26,7 +26,7 @@ function Register_Button(arg) {
 }
 
   //回车时，默认是登陆
- function on_return(){
+ function AUTO_KeyClick(){
  if(window.event.keyCode == 13){
   if (document.all('Register')!=null){
    document.all('Register').click();
