@@ -60,15 +60,18 @@ int main()
 		int Ethnum;
 
 		Ethnum = IsSameSegment();
+		
 		//有同一网段，返回所出去的网卡
 		if (Ethnum == -1)
 		{
 			//没有同一网段
 			//路由表查表
-			//Ethnum = Config_Route_MsgDispose(mybuf.dst_ip, NULL, NULL, INSERT);
+			Ethnum = Config_Route_MsgDispose(mybuf.dst_ip, NULL, NULL, INSERT);
 			if (Ethnum == -1)
 			{
-				
+				unsigned char buf[100];
+				sprintf(buf,"目的IP：%d,%d,%d,%d",mybuf.dst_ip[0],mybuf.dst_ip[1],mybuf.dst_ip[2],mybuf.dst_ip[3]);
+				printf("%s\n",buf);
 				continue;
 			}
 			//路由表有同一网段，返回所出去的网卡

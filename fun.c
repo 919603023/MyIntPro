@@ -430,17 +430,19 @@ int ArpDispose(unsigned char *ip, unsigned char *mac, unsigned char *mac_back, i
  * *******************************/
 int Config_Route_MsgDispose(unsigned char *ip, unsigned char *mac, unsigned char *ip_back, int flag)
 {
-	if (Route_Msg == NULL)
+	if (Route_Msg == NULL && flag != INSERT)
 		return -1;
 
 	int eth = -1;
 	CONFIG_ROUTE_MSG *head = Route_Msg;
 
-	while (head->next != NULL)
+	while (head != NULL)
 	{
 		//对比路由表中网段地址，与目的网段地址是否相同
 		//如果相同，证明路由表中有记录
-		if (memcmp(head->Route_Ip, (unsigned char *)(TwoIPNet(ip, head->Route_Netmask)), 4) == 0)
+		unsigned  int tmp = TwoIPNet(ip, head->Route_Netmask);
+		unsigned int *tm =&tmp;
+		if (memcmp(head->Route_Ip, tm, 4) == 0)
 		{
 			if (flag == DELETE)
 			{
@@ -472,7 +474,14 @@ int Config_Route_MsgDispose(unsigned char *ip, unsigned char *mac, unsigned char
 				}
 			}
 		}
-		head = head->next;
+		if (head->next == NULL)
+		{
+			break;
+		}
+		else
+		{
+			head = head->next;
+		}
 	}
 	if (flag == INSERT && eth == -1)
 	{
