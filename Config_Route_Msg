@@ -1,0 +1,8 @@
+#
+#
+###
+{
+Route_Ip:192.168.1.153
+Route_Netmask:255.255.255.0
+Route_NextHop:192.168.1.13
+}
